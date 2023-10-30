@@ -12,12 +12,10 @@ import entityRoutes from './routes/entityRoutes';
 // Others
 import corsOptions from './util/corsOptions';
 import { isOperationalError, returnError } from './errorHandlers/errorHandler';
+import * as secrets from './util/secrets';
 
 // Middleware
 import checkDBStatus from './middleware/checkDBStatus';
-
-dotenv.config({ path: '../.env' });
-
 
 // Express App Config
 const app = express();
@@ -62,15 +60,16 @@ app.use('/api/entity', checkDBStatus, entityRoutes);
 app.use('/api', (_req, res) => res.status(404).send({ error: 'Not found' }));
 app.use('/', (_req, res) => res.status(404).send({ error: 'Not found' }));
 
-//error handler middleware
+// error handler middleware
 app.use(returnError);
 
 process.on('unhandledRejection', error => {
+  console.error(error);
   throw error;
 });
 
 process.on('uncaughtException', error => {
-
+  console.error(error);
   if (!isOperationalError(error)) {
     process.exit(1);
   }
