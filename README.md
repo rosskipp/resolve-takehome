@@ -1,5 +1,27 @@
 # Resolve Takehome
 
+### Running Locally
+
+Requirements: Node v18+ (tested with v18)
+
+Running:
+
+```
+# clone repo
+npm i
+npm run dev
+```
+
+This will launch both the frontend and backend in a single terminal
+
+Some minimial testing is in place for the backend, to run those tests:
+
+```
+npm run test
+```
+
+---
+
 Requirements:
 
 Backend:
