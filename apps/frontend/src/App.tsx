@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Box, Button, Divider, Grid, Stack, Typography, TextField } from '@mui/material';
 import { getEntityById } from './api/api';
 import { ApiEntity } from './types';
+import EntityTable from './components/EntityTable';
 
 function App() {
   const [entityId, setEntityId] = useState(8862);
@@ -30,7 +31,7 @@ function App() {
       <Box sx={{ margin: '0 auto', padding: 10, textAlign: 'center', maxWidth: '1080px' }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography variant="h3">Resolve Entity Viewer</Typography>
+            <Typography variant="h3">Entity Viewer</Typography>
           </Grid>
 
           <Grid item xs={12}>
@@ -47,15 +48,13 @@ function App() {
             </Stack>
           </Grid>
 
-          {/* <Grid item xs={12}>
+          <Grid item xs={12}>
             <Divider color='white' />
-          </Grid> */}
+          </Grid>
 
           <Grid item xs={12}>
-            <div>
-              {error ? errorMessage : null}
-              {JSON.stringify(entity, null, 2)}
-            </div>
+            {/* If we get an error, show that. If we don't have properties yet (first load, then don't show the table) */}
+            {error ? errorMessage : Object.keys(entity.properties).length > 0 ? <EntityTable entity={entity} /> : null}
           </Grid>
         </Grid>
       </Box>
