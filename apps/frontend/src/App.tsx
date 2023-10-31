@@ -28,10 +28,10 @@ function App() {
   };
 
   const renderCategories = () => {
-    {/* If we get an error, show that. If we don't have properties yet (first load, then don't show the table) */ }
+    /* If we get an error, show that. If we don't have properties yet (first load, then don't show the table) */
     if (error) {
       return (
-        <Typography>errorMessage</Typography>
+        <Typography>{errorMessage}</Typography>
       );
     } else if (Object.keys(entity.properties).length > 0) {
       return (<EntityTable entity={entity} />);

@@ -4,19 +4,17 @@ import { Box, Collapse, IconButton, Paper, Stack, Table, TableBody, TableCell, T
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
-interface EntityTableProps {
-  entity: ApiEntity;
+interface EntityPropertiesRowProps {
+  propertyValues: PropertyValues;
+  open: boolean;
 }
 
-const EntityPropertiesRow: React.FC<{ propertyValues: PropertyValues, open: boolean; }> = ({ propertyValues, open }) => {
+const EntityPropertiesRow: React.FC<EntityPropertiesRowProps> = ({ propertyValues, open }) => {
   return (
     <TableRow key={crypto.randomUUID()}>
       <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={2}>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <Box sx={{ margin: 1 }}>
-            {/* <Typography variant="h6" gutterBottom component="div">
-              Properties
-            </Typography> */}
             <Table size="small" aria-label="purchases">
               <TableHead>
                 <TableRow key={crypto.randomUUID()}>
@@ -41,7 +39,13 @@ const EntityPropertiesRow: React.FC<{ propertyValues: PropertyValues, open: bool
 };
 
 
-const EntityCategoryRow: React.FC<{ category: [string, PropertyValues], open: boolean, setOpen: (category: string, open: boolean) => void; }> = ({ category, open, setOpen }) => {
+interface EntityCategoryRowProps {
+  category: [string, PropertyValues];
+  open: boolean;
+  setOpen: (category: string, open: boolean) => void;
+}
+
+const EntityCategoryRow: React.FC<EntityCategoryRowProps> = ({ category, open, setOpen }) => {
 
   return (
     <React.Fragment>
@@ -68,6 +72,10 @@ interface CategoryOpen {
   [key: string]: boolean;
 }
 
+interface EntityTableProps {
+  entity: ApiEntity;
+}
+
 const EntityTable: React.FC<EntityTableProps> = ({ entity }) => {
 
   const [categoryOpen, setCategoryOpen] = React.useState<CategoryOpen>({});
@@ -81,6 +89,9 @@ const EntityTable: React.FC<EntityTableProps> = ({ entity }) => {
     });
     setCategoryOpen(newCategoryOpen);
     console.log(`Setting category open to ${JSON.stringify(newCategoryOpen)}`);
+
+    // had to do this to ensure this only gets run on monunt
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setThisCategoryOpen = (category: string, open: boolean) => {
@@ -90,8 +101,6 @@ const EntityTable: React.FC<EntityTableProps> = ({ entity }) => {
     });
   };
 
-
-
   const renderCategories = () => {
     return categories.map(([category, propertyValues]) => {
       return (
@@ -99,7 +108,6 @@ const EntityTable: React.FC<EntityTableProps> = ({ entity }) => {
       );
     });
   };
-
 
   return (
     <Box>
