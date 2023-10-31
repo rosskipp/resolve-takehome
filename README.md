@@ -6,7 +6,7 @@ Requirements: Node v18+ (tested with v18)
 
 Running:
 
-```
+```bash
 # clone repo
 npm i
 npm run dev
@@ -16,7 +16,7 @@ This will launch both the frontend and backend in a single terminal
 
 Some minimial testing is in place for the backend, to run those tests:
 
-```
+```bash
 npm run test
 ```
 
@@ -24,13 +24,13 @@ npm run test
 
 Things are setup to deploy the backend as a docker container, and the frontend can easily be deployed as a static site.
 
-You can use the app at https://resolve-frontend.onrender.com
+You can use the app at https://resolve-frontend.onrender.com though it may be slow due to being on the free tier :smile:
 
 ---
 
-Requirements:
+### Requirements:
 
-Backend:
+##### Backend:
 
 - Build a javascript API service that returns property data for a specific entity id.
 - The API queries the SQLite file below to get info about the provided entity id.
@@ -38,7 +38,7 @@ Backend:
 - The API accepts requests with specific entity id's and return the data for requested entities.
 - Why download the file it instead of just having it hosted in this repo? We fetch files like this for every model because they're unique and come from 3rd party sources. So we want to see how you'd tackle this.
 
-Frontend:
+##### Frontend:
 
 - Build a client that requests and displays property data from #1.
 - The client should be a React app that accepts an entity id as input, sends a request to the service, and displays the resulting properties in a way the user can explore.
