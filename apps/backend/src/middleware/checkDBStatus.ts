@@ -10,32 +10,38 @@ const checkDBStatus = async (req: Request, res: Response, next: NextFunction) =>
   if (!DB_S3_URL || !LOCAL_DB_FILE_NAME || !LOCAL_DB_FOLDER) {
     throw new ApiError('Missing environment variables');
   }
+
   const localDbPath = path.join(LOCAL_DB_FOLDER, LOCAL_DB_FILE_NAME);
-  logger.info(`local db path: ${localDbPath}`);
+
   try {
-    if (fs.existsSync(localDbPath)) {
-      // If the DB file exists then continue
-      next();
-    } else {
-      // download and save the db file
-      const response = await fetch(DB_S3_URL);
-      const writer = fs.createWriteStream(localDbPath, { flags: 'wx' });
-      const reader = response.body?.getReader();
-      // TODO: figure out how to type this properly
-      reader?.read().then(function pump({ done, value }): any {
-        if (value) {
-          writer.write(value);
-        }
-        if (done) {
-          writer.close();
-          logger.info('DB downloaded');
-          return next();
-        } else {
-          return reader.read().then(pump);
-        }
-      });
-      writer.on('error', (error) => { throw new ApiError(`Failed to download DB: ${error.message}`); });
+    // If the folder doesn't exist, then create it
+    if (!fs.existsSync(LOCAL_DB_FOLDER)) {
+      fs.mkdirSync(LOCAL_DB_FOLDER);
     }
+
+    // If the DB file exists then continue
+    if (fs.existsSync(localDbPath)) {
+      next();
+    }
+
+    // If the file doesn't exist, download and save the db file
+    const response = await fetch(DB_S3_URL);
+    const writer = fs.createWriteStream(localDbPath, { flags: 'wx' });
+    const reader = response.body?.getReader();
+    // TODO: figure out how to type this properly
+    reader?.read().then(function pump({ done, value }): any {
+      if (value) {
+        writer.write(value);
+      }
+      if (done) {
+        writer.close();
+        logger.info('DB downloaded');
+        return next();
+      } else {
+        return reader.read().then(pump);
+      }
+    });
+    writer.on('error', (error) => { throw new ApiError(`Failed to download DB: ${error.message}`); });
   } catch (error) {
     throw new ApiError(`Error checking DB status: ${error.message}`);
   }

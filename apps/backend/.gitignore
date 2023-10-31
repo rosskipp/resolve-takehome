@@ -5,3 +5,5 @@ dist/
 logs
 *.log
 debug.log
+.vscode/
+coverage/

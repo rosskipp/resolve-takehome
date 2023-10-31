@@ -1,7 +1,7 @@
 export interface DBEntityRow {
   entity_id: number;
   attribute_id: number;
-  value_id: 17301;
+  value_id: number;
   name: string;
   category: string;
   data_type: number;

@@ -20,4 +20,6 @@ const createDbConnection = (): sqlite3.Database => {
   return db;
 };
 
-export default createDbConnection;
+export {
+  createDbConnection
+};
