@@ -1,36 +1,13 @@
 import ApiError from '../errorHandlers/apiError';
 import createDbConnection from '../db/db';
 import logger from '../util/logger';
-
-interface DBEntityRow {
-  entity_id: number;
-  attribute_id: number;
-  value_id: 17301;
-  name: string;
-  category: string;
-  data_type: number;
-  flags: number;
-  value: string;
-}
-
-interface PropertyValues {
-  [key: string]: string,
-}
-
-interface PropertyGroup {
-  [key: string]: PropertyValues;
-}
-
-interface ApiEntity {
-  entityId: number,
-  name: string,
-  properties: PropertyGroup;
-}
+import { ApiEntity, PropertyGroup, DBEntityRow } from '../types';
 
 
 export const getEntityById = async (id: number) => {
   try {
-    console.log('hit getEntities');
+    // we have to create the db connectin here because the db might not exist
+    // if we do it outside, then there could be an error
     const db = createDbConnection();
 
     const sql = `
