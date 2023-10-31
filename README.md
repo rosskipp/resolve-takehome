@@ -20,6 +20,12 @@ Some minimial testing is in place for the backend, to run those tests:
 npm run test
 ```
 
+### Deploying
+
+Things are setup to deploy the backend as a docker container, and the frontend can easily be deployed as a static site.
+
+You can use the app at https://resolve-frontend.onrender.com
+
 ---
 
 Requirements:
