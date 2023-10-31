@@ -21,7 +21,7 @@ const checkDBStatus = async (req: Request, res: Response, next: NextFunction) =>
 
     // If the DB file exists then continue
     if (fs.existsSync(localDbPath)) {
-      next();
+      return next();
     }
 
     // If the file doesn't exist, download and save the db file
