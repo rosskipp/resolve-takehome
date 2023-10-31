@@ -3,6 +3,7 @@ import { Box, Button, Divider, Grid, Stack, Typography, TextField } from '@mui/m
 import { getEntityById } from './api/api';
 import { ApiEntity } from './types';
 import EntityTable from './components/EntityTable';
+import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
   const [entityId, setEntityId] = useState(8862);
@@ -26,8 +27,23 @@ function App() {
     }
   };
 
+  const renderCategories = () => {
+    {/* If we get an error, show that. If we don't have properties yet (first load, then don't show the table) */ }
+    if (error) {
+      return (
+        <Typography>errorMessage</Typography>
+      );
+    } else if (Object.keys(entity.properties).length > 0) {
+      return (<EntityTable entity={entity} />);
+    } else {
+      return (
+        <Typography>No Properties to Display</Typography>
+      );
+    }
+  };
+
   return (
-    <>
+    <ErrorBoundary>
       <Box sx={{ margin: '0 auto', padding: 10, textAlign: 'center', maxWidth: '1080px' }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -53,12 +69,11 @@ function App() {
           </Grid>
 
           <Grid item xs={12}>
-            {/* If we get an error, show that. If we don't have properties yet (first load, then don't show the table) */}
-            {error ? errorMessage : Object.keys(entity.properties).length > 0 ? <EntityTable entity={entity} /> : null}
+            {renderCategories()}
           </Grid>
         </Grid>
       </Box>
-    </>
+    </ErrorBoundary>
   );
 }
 

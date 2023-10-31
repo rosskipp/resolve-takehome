@@ -14,9 +14,9 @@ const EntityPropertiesRow: React.FC<{ propertyValues: PropertyValues, open: bool
       <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={2}>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <Box sx={{ margin: 1 }}>
-            <Typography variant="h6" gutterBottom component="div">
+            {/* <Typography variant="h6" gutterBottom component="div">
               Properties
-            </Typography>
+            </Typography> */}
             <Table size="small" aria-label="purchases">
               <TableHead>
                 <TableRow key={crypto.randomUUID()}>
@@ -41,9 +41,7 @@ const EntityPropertiesRow: React.FC<{ propertyValues: PropertyValues, open: bool
 };
 
 
-const EntityCategoryRow: React.FC<{ category: [string, PropertyValues]; }> = ({ category }) => {
-
-  const [open, setOpen] = React.useState(false);
+const EntityCategoryRow: React.FC<{ category: [string, PropertyValues], open: boolean, setOpen: (category: string, open: boolean) => void; }> = ({ category, open, setOpen }) => {
 
   return (
     <React.Fragment>
@@ -52,7 +50,7 @@ const EntityCategoryRow: React.FC<{ category: [string, PropertyValues]; }> = ({ 
           <IconButton
             aria-label="expand row"
             size="small"
-            onClick={() => setOpen(!open)}
+            onClick={() => setOpen(category[0], !open)}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
@@ -66,14 +64,38 @@ const EntityCategoryRow: React.FC<{ category: [string, PropertyValues]; }> = ({ 
   );
 };
 
+interface CategoryOpen {
+  [key: string]: boolean;
+}
+
 const EntityTable: React.FC<EntityTableProps> = ({ entity }) => {
 
+  const [categoryOpen, setCategoryOpen] = React.useState<CategoryOpen>({});
+
   const categories = Object.entries(entity.properties);
+
+  React.useEffect(() => {
+    const newCategoryOpen: CategoryOpen = {};
+    categories.forEach((key) => {
+      newCategoryOpen[key[0]] = false;
+    });
+    setCategoryOpen(newCategoryOpen);
+    console.log(`Setting category open to ${JSON.stringify(newCategoryOpen)}`);
+  }, []);
+
+  const setThisCategoryOpen = (category: string, open: boolean) => {
+    console.log(`Setting category ${category} to ${open}`);
+    setCategoryOpen((prevCategoryOpen) => {
+      return { ...prevCategoryOpen, [category]: open };
+    });
+  };
+
+
 
   const renderCategories = () => {
     return categories.map(([category, propertyValues]) => {
       return (
-        EntityCategoryRow({ category: [category, propertyValues] })
+        EntityCategoryRow({ category: [category, propertyValues], open: categoryOpen[category], setOpen: setThisCategoryOpen })
       );
     });
   };
@@ -83,8 +105,8 @@ const EntityTable: React.FC<EntityTableProps> = ({ entity }) => {
     <Box>
       <Stack spacing={2} direction="column" justifyContent='center' alignItems='center'>
         <Stack spacing={2} direction="row" justifyContent='center' alignItems='center'>
-          <Typography variant="h4">{entity.name}</Typography>
-          {/* <Typography variant="h6">Entity Id: {entity.entityId}</Typography> */}
+          <Typography variant="h4">Name: {entity.name}</Typography>
+          <Typography variant="h6">Id: {entity.entityId}</Typography>
         </Stack>
         <TableContainer component={Paper}>
           <Table>
