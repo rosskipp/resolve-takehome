@@ -20,9 +20,7 @@ function App() {
     if (error) {
       setError(true);
       setErrorMessage(error.message);
-      console.log(error);
     } else {
-      console.log(data);
       if (data) setEntity(data);
     }
   };

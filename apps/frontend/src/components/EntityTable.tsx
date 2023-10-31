@@ -12,17 +12,17 @@ interface EntityPropertiesRowProps {
 const EntityPropertiesRow: React.FC<EntityPropertiesRowProps> = ({ propertyValues, open }) => {
   return (
     <TableRow key={crypto.randomUUID()}>
-      <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={2}>
-        <Collapse in={open} timeout="auto" unmountOnExit>
-          <Box sx={{ margin: 1 }}>
-            <Table size="small" aria-label="purchases">
-              <TableHead>
+      <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={2} key={crypto.randomUUID()}>
+        <Collapse in={open} timeout="auto" unmountOnExit key={crypto.randomUUID()}>
+          <Box sx={{ margin: 1 }} key={crypto.randomUUID()}>
+            <Table size="small" key={crypto.randomUUID()}>
+              <TableHead key={crypto.randomUUID()}>
                 <TableRow key={crypto.randomUUID()}>
-                  <TableCell width={200}>Property</TableCell>
-                  <TableCell width={300}>Value</TableCell>
+                  <TableCell width={200} key={crypto.randomUUID()}>Property</TableCell>
+                  <TableCell width={300} key={crypto.randomUUID()}>Value</TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
+              <TableBody key={crypto.randomUUID()}>
                 {Object.keys(propertyValues).map((key) => (
                   <TableRow key={crypto.randomUUID()}>
                     <TableCell component="th" scope="row">{key}</TableCell>
@@ -48,19 +48,20 @@ interface EntityCategoryRowProps {
 const EntityCategoryRow: React.FC<EntityCategoryRowProps> = ({ category, open, setOpen }) => {
 
   return (
-    <React.Fragment>
+    <React.Fragment key={crypto.randomUUID()}>
       <TableRow key={crypto.randomUUID()}>
-        <TableCell>
+        <TableCell key={crypto.randomUUID()}>
           <IconButton
             aria-label="expand row"
             size="small"
             onClick={() => setOpen(category[0], !open)}
+            key={crypto.randomUUID()}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">
-          <Typography variant='h6'>{category[0]}</Typography>
+        <TableCell component="th" scope="row" key={crypto.randomUUID()}>
+          <Typography variant='h6' key={crypto.randomUUID()}>{category[0]}</Typography>
         </TableCell>
       </TableRow>
       <EntityPropertiesRow propertyValues={category[1]} open={open} />
@@ -88,14 +89,12 @@ const EntityTable: React.FC<EntityTableProps> = ({ entity }) => {
       newCategoryOpen[key[0]] = false;
     });
     setCategoryOpen(newCategoryOpen);
-    console.log(`Setting category open to ${JSON.stringify(newCategoryOpen)}`);
 
     // had to do this to ensure this only gets run on monunt
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setThisCategoryOpen = (category: string, open: boolean) => {
-    console.log(`Setting category ${category} to ${open}`);
     setCategoryOpen((prevCategoryOpen) => {
       return { ...prevCategoryOpen, [category]: open };
     });
@@ -111,15 +110,15 @@ const EntityTable: React.FC<EntityTableProps> = ({ entity }) => {
 
   return (
     <Box>
-      <Stack spacing={2} direction="column" justifyContent='center' alignItems='center'>
-        <Stack spacing={2} direction="row" justifyContent='center' alignItems='center'>
+      <Stack key={crypto.randomUUID()} spacing={2} direction="column" justifyContent='center' alignItems='center'>
+        <Stack key={crypto.randomUUID()} spacing={2} direction="row" justifyContent='center' alignItems='center'>
           <Typography variant="h4">Name: {entity.name}</Typography>
           <Typography variant="h6">Id: {entity.entityId}</Typography>
         </Stack>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
-              <TableRow>
+              <TableRow key={crypto.randomUUID()}>
                 <TableCell />
                 <TableCell>
                   <Typography variant='h5'><b>Category</b></Typography>
